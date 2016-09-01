@@ -2,10 +2,10 @@ FROM ubuntu:16.04
 MAINTAINER Thomas Johansen "thomas.johansen@accenture.com"
 
 
-ARG LDAP_DOMAIN
-ARG LDAP_ORG
-ARG LDAP_HOSTNAME
-ARG LDAP_PASSWORD
+ARG LDAP_DOMAIN=acntech.no
+ARG LDAP_ORG=AcnTech
+ARG LDAP_HOSTNAME=ldap.acntech.internal
+ARG LDAP_PASSWORD=welcome1
 
 
 ENV SHELL /bin/bash
