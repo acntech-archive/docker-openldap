@@ -42,18 +42,11 @@ RUN echo "slapd slapd/allow_ldap_v2 boolean false" | debconf-set-selections
 RUN echo "slapd slapd/no_configuration boolean false" | debconf-set-selections
 
 RUN apt-get -y install slapd
-#RUN dpkg-reconfigure slapd
 
 
-# Change LDAP root password
-RUN service slapd start && ldapsearch -H ldapi:// -LLL -Q -Y EXTERNAL -b "cn=config" "(olcRootDN=*)" dn olcRootDN olcRootPW > /tmp/oldpasswd.ldif
-
-RUN head -1 /tmp/oldpasswd.ldif > /tmp/newpasswd.ldif
-RUN echo "changetype: modify" >> /tmp/newpasswd.ldif
-RUN echo "replace: olcRootPW" >> /tmp/newpasswd.ldif
-RUN echo "olcRootPW: $(slappasswd -h {SSHA} -s ${LDAP_PASSWORD})" >> /tmp/newpasswd.ldif
-
-RUN service slapd start && ldapmodify -H ldapi:// -Y EXTERNAL -f /tmp/newpasswd.ldif
+# Change LDAP root password and logging
+COPY files/slapd.config.sh /tmp/
+RUN /tmp/slapd.config.sh ${LDAP_PASSWORD}
 
 
 # Install phpLDAPadmin
@@ -62,9 +55,6 @@ RUN apt-get -y install phpldapadmin
 # Script to SED replace entries in phpLDAPadmin config file
 COPY files/phpldapadmin.config.php.sh /tmp/
 RUN /tmp/phpldapadmin.config.php.sh ${LDAP_DOMAIN} ${LDAP_ORG} ${LDAP_HOSTNAME}
-
-
-#RUN dpkg-reconfigure tzdata
 
 
 # Set FQDN for Apache Webserver
@@ -78,6 +68,6 @@ RUN apt-get clean
 EXPOSE 389 636 80
 
 
-COPY files/entrypoint.sh /root/
+COPY files/entrypoint.sh /
 
-ENTRYPOINT ["/root/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]

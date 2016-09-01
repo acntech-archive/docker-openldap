@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -ne 3 ]; then
-	echo "The script needs 3 arguments"
+	echo "The script needs 3 argument(s)"
 	echo "Call with: $0 <LDAP_DOMAIN> <LDAP_ORG> <LDAP_HOSTNAME>"
 	exit 1
 fi
@@ -22,5 +22,3 @@ sed -i 's/\s*\$servers->setValue('\''server'\'','\''base'\'',array('\''.*'\''));
 sed -i 's/\s*\$servers->setValue('\''login'\'','\''bind_id'\'','\''.*'\'');\s*/$servers->setValue('\''login'\'','\''bind_id'\'','\''cn=admin,'"${LDAP_BASE}"\'');/g' /etc/phpldapadmin/config.php
 
 sed -i 's/\s*[#]*[\/\/]*\s*\$config->custom->appearance\['\''hide_template_warning'\''\]\s*=\s*false;\s*/$config->custom->appearance['\''hide_template_warning'\''] = true;/g' /etc/phpldapadmin/config.php
-
-exit 0
