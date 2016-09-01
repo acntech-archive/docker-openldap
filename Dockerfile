@@ -46,6 +46,7 @@ RUN apt-get -y install slapd
 
 # Change LDAP root password and logging
 COPY files/slapd.config.sh /tmp/
+RUN chmod +x /tmp/slapd.config.sh
 RUN /tmp/slapd.config.sh ${LDAP_PASSWORD}
 
 
@@ -54,6 +55,7 @@ RUN apt-get -y install phpldapadmin
 
 # Script to SED replace entries in phpLDAPadmin config file
 COPY files/phpldapadmin.config.php.sh /tmp/
+RUN chmod +x /tmp/phpldapadmin.config.php.sh
 RUN /tmp/phpldapadmin.config.php.sh ${LDAP_DOMAIN} ${LDAP_ORG} ${LDAP_HOSTNAME}
 
 
@@ -69,5 +71,5 @@ EXPOSE 389 636 80
 
 
 COPY files/entrypoint.sh /
-
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
