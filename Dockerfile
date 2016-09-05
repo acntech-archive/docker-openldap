@@ -52,7 +52,7 @@ COPY files /tmp/files
 
 
 # Change LDAP root password and logging
-RUN chmod +x /tm/files/modify_slapd_config.sh
+RUN chmod +x /tmp/files/modify_slapd_config.sh
 RUN /tmp/files/modify_slapd_config.sh ${LDAP_PASSWORD}
 RUN echo "local4.*			/var/log/sldapd.log" > /etc/rsyslog.d/slapd.conf
 
