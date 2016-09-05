@@ -21,5 +21,3 @@ echo "olcRootPW: $(slappasswd -h {SSHA} -s ${LDAP_PASSWORD})" >> ${NEW_PASSWORD_
 ldapmodify -H ldapi:// -Y EXTERNAL -f ${NEW_PASSWORD_LDIF}
 
 rm ${OLD_PASSWORD_LDIF} ${NEW_PASSWORD_LDIF}
-
-echo "local4.*			/var/log/sldapd.log" > /etc/rsyslog.d/slapd.conf
